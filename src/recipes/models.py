@@ -8,6 +8,13 @@ class Recipe(models.Model):
         null=False, help_text="Short name for the user to identify the Recipe.",
     )
 
+    preparation = models.TextField(
+        null=True, help_text="Steps to prepare the Recipe.", default=""
+    )
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
@@ -21,3 +28,6 @@ class RecipeIngredient(models.Model):
         # validators=[MinValueValidator(0)],
         help_text="Amount of units of the given ingredient in the recipe.",
     )
+
+    def __str__(self) -> str:
+        return f"{self.ingredient.name}, {self.amount} {self.ingredient.unit}"

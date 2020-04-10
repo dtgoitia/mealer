@@ -9,3 +9,6 @@ class Ingredient(models.Model):
     unit = models.TextField(
         null=False, help_text="Unit of measure for the ingredient.",
     )
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.unit})"

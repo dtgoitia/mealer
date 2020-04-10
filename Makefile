@@ -55,6 +55,13 @@ typecheck-test:
 repopulate-db:
 	bash ./scripts/truncate-tables.sh
 	rm -rf src/*/migrations/*
+	python manage.py create_sample_data
+
+recreate-db:
+	dropdb ${POSTGRES_DB}
+	createdb ${POSTGRES_DB}
+	rm -rf src/*/migrations/*
 	python manage.py makemigrations ingredients recipes
 	python manage.py migrate
+	python manage.py createsuperuser --username=admin --email=admin@example.com
 	python manage.py create_sample_data
