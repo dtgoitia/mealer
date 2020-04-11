@@ -6,8 +6,7 @@ import src.recipes.api.graphql.queries
 
 
 class Query(
-    src.ingredients.api.graphql.queries.Query,
-    graphene.ObjectType,
+    src.ingredients.api.graphql.queries.Query, graphene.ObjectType,
 ):
     pass
 
