@@ -1,10 +1,17 @@
 import datetime
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, NoReturn, Optional
 
+from django.db import transaction
 import yaml
 
 from .models import Ingredient
+
+
+class IngredientService:
+    @staticmethod
+    def delete_all() -> Optional[NoReturn]:
+        Ingredient.objects.all().delete()
 
 
 class IngredientExporter:
@@ -37,3 +44,20 @@ class IngredientExporter:
             "name": ingredient.name,
             "unit": ingredient.unit,
         }
+
+
+class IngredientImporter:
+    @staticmethod
+    @transaction.atomic
+    def import_backup(path: str) -> None:
+        """Import new tables.
+        
+        It assumes the table is clean.
+        """
+        with open(path, "r") as f:
+            data = yaml.full_load(f)
+
+        for item in data["ingredients"]:
+            # TODO: optimize with bulk import
+            ingredient = Ingredient(id=item["id"], name=item["name"], unit=item["unit"])
+            ingredient.save()
