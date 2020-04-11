@@ -7,9 +7,20 @@ class Recipe(models.Model):
     name = models.TextField(
         null=False, help_text="Short name for the user to identify the Recipe.",
     )
-
     preparation = models.TextField(
         null=True, help_text="Steps to prepare the Recipe.", default=""
+    )
+    portions = models.IntegerField(
+        null=True,
+        blank=True,
+        # If not specified (blank), means I'm still unsure
+        help_text="Number of portions obtained from the Recipe.",
+    )
+    duration = models.IntegerField(
+        null=True,
+        blank=True,
+        # If not specified (blank), means I'm still unsure
+        help_text="Number of minutes it takes to prepare the Recipe.",
     )
 
     def __str__(self) -> str:

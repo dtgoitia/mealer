@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "src.ingredients",
     "src.recipes",
+    "src.orchestration",
     "graphene_django",
 ]
 
