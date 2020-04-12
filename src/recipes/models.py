@@ -3,6 +3,9 @@ from django.db import models
 from src.ingredients.models import Ingredient
 
 
+UNITLESS = "-"
+
+
 class Recipe(models.Model):
     name = models.TextField(
         null=False, help_text="Short name for the user to identify the Recipe.",
@@ -23,15 +26,9 @@ class Recipe(models.Model):
         help_text="Number of minutes it takes to prepare the Recipe.",
     )
 
-    def __str__(self) -> str:
-        return f"{self.name}"
-
     @property
     def markdown(self) -> str:
-        ingredients = [
-            f"  - {item.amount} {item.ingredient.unit}, {item.ingredient.name}"
-            for item in self.ingredients.all()
-        ]
+        ingredients = [self._format_item(item) for item in self.ingredients.all()]
         ingredients_section = "\n".join(ingredients)
         return f"""
 # {self.name}
@@ -44,6 +41,17 @@ class Recipe(models.Model):
 
 {self.preparation if self.preparation else 'no preparation'}
 """.strip()
+
+    def _format_item(self, item: "RecipeIngredient") -> str:
+        indentation = "  - "
+        if item.ingredient.unit == UNITLESS:
+            return f"{indentation}{item.ingredient.name}"
+        return (
+            f"{indentation}{item.amount} {item.ingredient.unit}, {item.ingredient.name}"
+        )
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class RecipeIngredient(models.Model):
