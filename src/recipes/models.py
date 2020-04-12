@@ -26,6 +26,25 @@ class Recipe(models.Model):
     def __str__(self) -> str:
         return f"{self.name}"
 
+    @property
+    def markdown(self) -> str:
+        ingredients = [
+            f"  - {item.amount} {item.ingredient.unit}, {item.ingredient.name}"
+            for item in self.ingredients.all()
+        ]
+        ingredients_section = "\n".join(ingredients)
+        return f"""
+# {self.name}
+
+## Ingredients
+
+{ingredients_section if len(ingredients) > 0 else '(no ingredients)'}
+
+## Preparation
+
+{self.preparation if self.preparation else 'no preparation'}
+""".strip()
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(

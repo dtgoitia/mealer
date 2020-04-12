@@ -7,11 +7,10 @@ class RecipeIngredientInlineAdmin(admin.TabularInline):
     model = RecipeIngredient
 
 
+@admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    fields = ("name", "preparation")
-    list_display = ("name",)
+    fields = ("name", "preparation", "markdown")
+    readonly_fields = ("markdown",)
+    list_display = ("name", "duration")
     ordering = ("name",)
     inlines = (RecipeIngredientInlineAdmin,)
-
-
-admin.site.register(Recipe, RecipeAdmin)
